@@ -38,17 +38,36 @@ export class Rational {
   }
 
   exprational(n: number): Rational {
-    // Exponentiation of a rational number r = a/b to a non-negative integer power n is r^n = (a^n)/(b^n).
-    const postNumerator = this.numerator^n
-    const postDenominator = this.denominator^n
-    return new Rational(postNumerator, postDenominator)
+    let postNumerator = Math.abs(this.numerator) ** n;
+    let postDenominator = Math.abs(this.denominator) ** n;
+
+    if (this.numerator < 0 && n % 2 !== 0) {
+      postNumerator = -postNumerator;
+    }
+
+    return new Rational(postNumerator, postDenominator);
   }
 
-  expreal() {
-    
+  expreal(x: number): number {
+    if (this.denominator === 0) throw new Error("Denominator cannot be zero");
+    return x ** (this.numerator / this.denominator);
   }
 
-  reduce() {
-    throw new Error('Remove this line and implement the function')
+  private gcd(a: number, b: number): number {
+    return b === 0 ? Math.abs(a) : this.gcd(b, a % b);
+  }
+
+  reduce(): Rational {
+    const gcdValue = this.gcd(this.numerator, this.denominator);
+    let num = this.numerator / gcdValue;
+    let den = this.denominator / gcdValue;
+
+    // Ensure denominator is positive
+    if (den < 0) {
+      num = -num;
+      den = -den;
+    }
+
+    return new Rational(num, den);
   }
 }
