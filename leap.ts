@@ -1,0 +1,7 @@
+//task-> output boolean of wether a year is a leap year by checking through conditionals.
+
+export function isLeap(year: number): boolean {
+    return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+}
+
+console.log(isLeap(1900))
