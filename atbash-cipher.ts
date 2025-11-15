@@ -29,8 +29,11 @@ const atbashCipher: {[key: string]: string} = {
 
 export function encode(plainText: string): string {
   let encrypted = "" // encrypting first
-  for (const char of plainText) {
-    if (char in atbashCipher) {
+
+  for (const char of (plainText.toLowerCase())) {
+    if(char === "." || char === ",") {
+      continue
+    } else if (char in atbashCipher) {
       encrypted += atbashCipher[char]
     } else {
       encrypted += char
@@ -39,6 +42,7 @@ export function encode(plainText: string): string {
 
   let ordered = "" // then ordering (in groups of 5)
   let count = 0 
+
   for (const char of (encrypted.replace(/\s+/g, ""))) {
     ordered += char
     count++
@@ -52,7 +56,17 @@ export function encode(plainText: string): string {
 }
 
 export function decode(cipherText: string): string {
-  throw new Error('Remove this line and implement the function')
+  let decrypted = ""
+
+  for (const char of (cipherText.replace(/\s+/g, "")).toLowerCase()) {
+    if (char in atbashCipher) {
+      decrypted += (Object.keys(atbashCipher) as Array<keyof typeof atbashCipher>).find(k => atbashCipher[k] === char)
+    } else {
+      decrypted += char
+    }
+  }
+
+  return decrypted
 }
 
-console.log(encode("I love money i want 2000 dollar"))
+console.log(encode("I like dogs, as they are good animals"))
